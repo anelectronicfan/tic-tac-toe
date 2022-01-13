@@ -57,6 +57,11 @@ const playerClickEvents = function (cell, index) {
     
     gameEndEvents(checkWin());
     switchPlayer();
+    if (isAIPlayingX === true && currentPlayer === 'X') {
+        AIClickEvents();
+    } else if (isAIPlayingO === true && currentPlayer === 'O') {
+        AIClickEvents();
+    }
 }
 
 //Add event listeners to each cell
@@ -94,8 +99,7 @@ const switchPlayer = function () {
     currentPlayer = currentPlayer === 'X' ? 'O': 'X';
     playerTurnNode.className = playerTurnNode.className === 'playerTurn playerX' ? 'playerTurn playerO' : 'playerTurn playerX';
     playerTurnNode.innerText = playerTurnNode.innerText === `Player 1's Turn` ? `Player 2's Turn` : `Player 1's Turn`;
-    isAIPlayingX = false;
-    isAIPlayingY = false;
+    
 }
 
 //Function that checks if the game has been 'win' or 'tied'
@@ -255,7 +259,7 @@ xAIToggleButton.addEventListener('click', function () {
     isAIPlayingX = true; //Again, tried refactoring this inside a function, but it didn't want to work
     console.log('isAIPlayingX:', isAIPlayingX);
     if (currentPlayer === 'X') {
-        AIClickEvents(isAIPlayingX);
+        AIClickEvents();
     }
 })
 
@@ -267,11 +271,16 @@ oAIToggleButton.addEventListener('click', function () {
     }
 })
 
-const AIClickEvents = function (AIPlayer) {
+const AIClickEvents = function () {
     const AIMove = calculateBestMove (currentPlayer);
     assignCellToPlayer(cellArray[AIMove], AIMove);
     gameEndEvents(checkWin());
     switchPlayer();
+    if (isAIPlayingX === true && currentPlayer === 'X') {
+        AIClickEvents();
+    } else if (isAIPlayingO === true && currentPlayer === 'O') {
+        AIClickEvents();
+    }
 }
 
 
