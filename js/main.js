@@ -287,7 +287,7 @@ const AIClickEvents = function () {
         } else if (isAIPlayingO === true && currentPlayer === 'O') {
             AIClickEvents();
         }
-    }, 500) 
+    }, 300) 
 }
 
 
