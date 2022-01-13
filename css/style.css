@@ -47,6 +47,7 @@ body {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
+    
 }
 .cell {
     width: 96px;
@@ -99,8 +100,6 @@ body {
 
 .charSelect {
     margin: auto auto;
-    grid-row-start: 1;
-    grid-row-end: 1;
 }
 .icon {
     width: 96px;
@@ -135,3 +134,35 @@ span {
 .selectedIcon {
     background-color: rgba(0, 128, 0, 0.301);
 }
+
+p {
+    margin: 0;
+    line-height: 5px;
+}
+
+.AI {
+    cursor: pointer;
+}
+
+.AI:hover {
+    color: rgba(0, 128, 0, 0.479);
+}
+
+@media screen and (min-width: 450px) and (max-width: 600px) {
+    .container {
+        max-width: 450px;
+    }
+    .gameBoard {
+        top: 50%;
+        transform: translateY(50%);
+    }
+    .cell {
+        width: 48px;
+        height: 48px;
+    }
+    .icon {
+        width: 48px;
+        height: 48px;
+    }
+}
+

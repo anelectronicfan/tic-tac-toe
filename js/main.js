@@ -14,7 +14,6 @@ const playerTurnNode = document.querySelector('.playerTurn');
 let currentPlayer = 'X';
 let xScore = 0;
 let oScore = 0;
-let roundsPlayed = 1;
 const xScoreNode = document.querySelector('#xScore');
 const oScoreNode = document.querySelector('#oScore');
 
@@ -22,6 +21,9 @@ const gameWonSound = document.querySelector("#gameWonSound");
 const invalidInputSound = document.querySelector("#invalidInputSound");
 const tieSound = document.querySelector("#tieSound");
 const validInputSound = document.querySelector("#validInputSound");
+
+let isAIPlayingX = false;
+let isAIPlayingO = false;
 
 let board = ['', '', '', '', '', '', '', '', ''];
     //Board looks like this
@@ -59,6 +61,7 @@ const playerClickEvents = function (cell, index) {
     gameEndEvents(checkWin());
     switchPlayer();
 }
+
 //Add event listeners to each cell
 cellArray.forEach( function (cell, index) {
     cell.addEventListener('click', function () {
@@ -91,12 +94,12 @@ const assignCellToPlayer = function (cell, boardIndex) {
 const switchPlayer = function () {
     currentPlayer = currentPlayer === 'X' ? 'O': 'X';
     playerTurnNode.className = playerTurnNode.className === 'playerTurn playerX' ? 'playerTurn playerO' : 'playerTurn playerX';
-    playerTurnNode.innerText = playerTurnNode.innerText === `Player 1's Turn.` ? `Player 2's Turn.` : `Player 1's Turn.`;
+    playerTurnNode.innerText = playerTurnNode.innerText === `Player 1's Turn` ? `Player 2's Turn` : `Player 1's Turn`;
 }
 
 //Function that checks if the game has been 'win' or 'tied'
 const checkWin = function () {
-    let currentPlayerCellIndexes = [];
+    const currentPlayerCellIndexes = playerCellIndexCreator (currentPlayer);
 
     //loop through the board array, pushing the indexes of the currentPlayer's cells into currentPlayerCellIndexes
     for (let i = 0; i < board.length; i ++) {
@@ -113,13 +116,11 @@ const checkWin = function () {
         if (currentPlayerCellIndexes.includes(a) && currentPlayerCellIndexes.includes(b) && currentPlayerCellIndexes.includes(c)) {
             if (currentPlayer === "X") {
                 xScore ++;
-                roundsPlayed++;
                 xScoreNode.innerText = `Score: ${xScore}`;
 
 
             } else {
                 oScore ++;
-                roundsPlayed++;
                 oScoreNode.innerText = `Score: ${oScore}`;
 
             }
@@ -133,6 +134,17 @@ const checkWin = function () {
         return false;   //reflects the state where game hasn't ended
     }
 
+}
+
+//Function that loops through the board and returns a given player's taken cell indexes as an array
+const playerCellIndexCreator = function (player) {
+    const playerCellIndexes = []
+    for (let i = 0; i < board.length; i ++) {
+        if (board[i] === player) {
+            playerCellIndexes.push(i);
+        }
+    }
+    return playerCellIndexes;
 }
 
 //Function that tells the game what to do when the game ends
@@ -180,13 +192,13 @@ const initialiseBoard = function (timer) {
 const hardInitialiseBoard = function () {
     initialiseBoard ();
     xScore = 0;
-    oScore = 0;
-    roundsPlayed = 1;
+    oScore =1;
     xScoreNode.innerText = `Score: ${xScore}`;
     oScoreNode.innerText = `Score: ${oScore}`;
 
 }
 
+//Adding Event Listener to the reset button
 resetButton.addEventListener("click", function () {
     hardInitialiseBoard(0);
 })
@@ -230,3 +242,96 @@ const changeIcon = function (icon, playerIconBackground, cellClassName, iconClas
 }
 
 //Part 3 - A.I but it's more A than I -----------------------------------
+
+//Adding Event Listeners to each AI toggle button
+const xAIToggleButton = document.querySelector("#xAIToggle");
+const oAIToggleButton = document.querySelector("#oAIToggle");
+
+xAIToggleButton.addEventListener('click', function () {
+    isAIPlayingX = isAIPlayingX === true ? false : true; //Again, tried refactoring this inside a function, but it didn't want to work
+    console.log(isAIPlayingX);
+    AIClickEvents(isAIPlayingX);
+})
+
+oAIToggleButton.addEventListener('click', function () {
+    isAIPlayingX = isAIPlayingX === true ? false : true;
+    AIClickEvents(isAIPlayingO);
+})
+
+//Function that tells the game what to do when an AI toggle button is hit
+const AIClickEvents = function (isAIPlaying) {
+    
+}
+
+//Function that looks at the board and returns a board index as an optimal move
+const calculateBestMove = function (AIPlayer) {
+    let bestMove = 0;
+    if (board[4] === '') {
+        bestMove = 4;
+        return bestMove;
+    }
+    const opposingPlayer = AIPlayer === "X" ? "O" : "X";
+
+    const AIPlayerCellIndexes = playerCellIndexCreator(AIPlayer);
+    const opposingPlayerCellIndexes = playerCellIndexCreator(opposingPlayer);
+
+    //first loop through opposing player's taken tiles
+    const defensiveBestMove = checkWinningMove(opposingPlayerCellIndexes);
+    const defensiveGoodMove = checkGoodMove(opposingPlayerCellIndexes);
+    //next loop through the AI's tiles
+    const offensiveBestMove = checkWinningMove (AIPlayerCellIndexes);
+    
+    //if offensive move can win the game, bestmove = offensive move, else bestmove = defensive move
+    if (offensiveBestMove !== '') {
+        bestMove = offensiveBestMove;
+    } else if (defensiveBestMove !== '') {
+        bestMove = defensiveBestMove;
+    } else if (defensiveGoodMove !== ''){
+        bestMove = defensiveGoodMove;
+    } else {
+        bestMove = board.indexOf("");
+    }
+    return bestMove;
+}
+
+//Function that determines if taking a certain tile will win the game or not
+const checkWinningMove = function (array) {
+    let bestMove = '';
+    for (let i = 0; i < winningIndexes.length; i++) {
+        let a = winningIndexes[i][0];
+        let b = winningIndexes[i][1];
+        let c = winningIndexes[i][2];
+        if (array.includes(a) && array.includes(b) && board[c] === '') {
+            bestMove = c;
+        } else if (array.includes(a) && array.includes(c) && board[b] === '') {
+            bestMove = b;
+        } else if (array.includes(b) && array.includes(c) && board[a] === '') {
+            bestMove = a;
+        } 
+    }
+    return bestMove;
+}
+
+//Function that returns a move that is considered defensive
+const checkGoodMove = function (array) {
+    let goodMove = '';
+    for (let i = 0; i < winningIndexes.length; i++) {
+        let a = winningIndexes[i][0];
+        let b = winningIndexes[i][1];
+        let c = winningIndexes[i][2];
+        if (array.includes(a) && board[b] === '') {
+            goodMove = b;
+        } else if (array.includes(a) && board[c] === '') {
+            goodMove = c;
+        } else if (array.includes(b) && board[a] === '') {
+            goodMove = a;
+        } else if (array.includes(b) && board[c] === '') {
+            goodMove = c;
+        } else if (array.includes(c) && board[a] === '') {
+            goodMove = a;
+        } else if (array.includes(c) && board[b] === '') {
+            goodMove = b;
+        }
+    }
+    return goodMove;
+}
