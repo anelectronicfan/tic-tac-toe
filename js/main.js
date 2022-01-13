@@ -4,8 +4,8 @@
 const cellArray = document.querySelectorAll('.cell');   //Array.from is a method that converts an array-like object (like a nodelist) into an array
 
 const iconArray = document.querySelectorAll('.icon');
-let playerXIcon = 'url(images/icons8-bt21-cooky-96.png)';
-let playerOIcon = "url(images/icons8-bt21-rj-96.png)";
+let playerXIconBackground = 'url(images/icons8-bt21-cooky-96.png)';
+let playerOIconBackground = "url(images/icons8-bt21-rj-96.png)";
 
 const gameOverNode = document.querySelector('.gameOver');
 const resetButton = document.querySelector('#reset');
@@ -83,7 +83,7 @@ const assignCellToPlayer = function (cell, boardIndex) {
     cell.classList.remove(`player${currentPlayer}`);
     board[boardIndex] = currentPlayer;
     cell.classList.add(`player${currentPlayer}`);
-    cell.style.backgroundImage = currentPlayer === 'X' ? playerXIcon : playerOIcon;
+    cell.style.backgroundImage = currentPlayer === 'X' ? playerXIconBackground : playerOIconBackground;
 
 }
 
@@ -205,19 +205,27 @@ iconArray.forEach( function (icon) {
 //Function that handles events when an icon is clicked
 const iconClickEvents = function (icon) {
     if (icon.className === "icon playerX") {
-        playerXIcon = icon.style.backgroundImage;   //I tried refactoring this into the changeIcon function, but it broke the code for some reason
-        changeIcon(playerXIcon, "cell playerX");
-    } else {
-        playerOIcon = icon.style.backgroundImage;
-        changeIcon(playerOIcon, "cell playerO");
+        playerXIconBackground = icon.style.backgroundImage;   //I tried refactoring this into the changeIcon function, but it broke the code for some reason
+        changeIcon(icon, playerXIconBackground, "cell playerX", "icon playerX");
+    } else if (icon.className === "icon playerO"){
+        playerOIconBackground = icon.style.backgroundImage;
+        changeIcon(icon, playerOIconBackground, "cell playerO", "icon playerO");
     }
 }
 
-//Function that changes all backgrounds of a player's taken cells to a new one
-const changeIcon = function (playerIcon, className) {
-    console.log(playerIcon);
-    const cellPlayerArray = Array.from(document.getElementsByClassName(className));
+//Function that changes the selected icon, replacing the previous icon for the player
+const changeIcon = function (icon, playerIconBackground, cellClassName, iconClassName) {
+    console.log(playerIconBackground);
+    const cellPlayerArray = Array.from(document.getElementsByClassName(cellClassName));
     cellPlayerArray.forEach( function (cell) {
-        cell.style.backgroundImage = playerIcon;
+        cell.style.backgroundImage = playerIconBackground;
     })
+
+    const iconPlayerArray = Array.from(document.getElementsByClassName(iconClassName));
+    iconPlayerArray.forEach(function(node) {
+        node.classList.remove("selectedIcon");
+    })
+
+    icon.classList.add("selectedIcon");
 }
+

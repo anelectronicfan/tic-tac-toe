@@ -131,3 +131,6 @@ span {
     color: black;
 }
 
+.selectedIcon {
+    background-color: rgba(0, 128, 0, 0.301);
+}
