@@ -258,7 +258,7 @@ const changeIcon = function (icon, playerIconBackground, cellClassName, iconClas
 
 xAIToggleButton.addEventListener('click', function () {
     isAIPlayingX = isAIPlayingX === true ? false : true; //Again, tried refactoring this inside a function, but it didn't want to work
-    xAIToggleButton.innerText = isAIPlayingX === true ? "I'm feeling active" : "I'm feeling lazy";
+    xAIToggleButton.innerText = isAIPlayingX === true ? "I want to play!" : "I'm feeling lazy";
     console.log('isAIPlayingX:', isAIPlayingX);
     if (currentPlayer === 'X') {
         AIClickEvents();
@@ -267,7 +267,7 @@ xAIToggleButton.addEventListener('click', function () {
 
 oAIToggleButton.addEventListener('click', function () {
     isAIPlayingO = isAIPlayingO === true ? false : true;
-    oAIToggleButton.innerText = isAIPlayingO === true ? "I'm feeling active" : "I'm feeling lazy";
+    oAIToggleButton.innerText = isAIPlayingO === true ? "I want to play!" : "I'm feeling lazy";
     console.log('isAIPlayingO:',isAIPlayingO);
     if (currentPlayer === 'O') {
         AIClickEvents(isAIPlayingO);
