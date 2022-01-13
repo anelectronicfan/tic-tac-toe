@@ -16,7 +16,7 @@ My rendition of the classic game is written in HTML, CSS and vanilla Javascript.
 - WET Code (but fortunately no spaghetti)
 - Lots of console.logs
 - Customisable Pop-Culture Icons because noughts and crosses are out-dated and the world doesn't have enough pop-culture references already
-- Togglable Fully-Functional AI that is surprisingly hard to beat. I've never won a game against it yet.
+- Togglable Fully-Functional AI that is surprisingly hard to beat. I've yet to win a round against it.
 - A score counter that keeps track of how many games each player has won.
 
 Here's how the game looks on a laptop or desktop PC:
