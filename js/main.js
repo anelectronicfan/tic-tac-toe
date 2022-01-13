@@ -7,6 +7,9 @@ const iconArray = document.querySelectorAll('.icon');
 let playerXIcon = 'url(images/icons8-bt21-cooky-96.png)';
 let playerOIcon = "url(images/icons8-bt21-rj-96.png)";
 
+const gameOverNode = document.querySelector('.gameOver');
+const resetButton = document.querySelector('#reset');
+
 const playerTurnNode = document.querySelector('.playerTurn');
 let currentPlayer = 'X';
 let xScore = 0;
@@ -14,6 +17,11 @@ let oScore = 0;
 let roundsPlayed = 1;
 const xScoreNode = document.querySelector('#xScore');
 const oScoreNode = document.querySelector('#oScore');
+
+const gameWonSound = document.querySelector("#gameWonSound");
+const invalidInputSound = document.querySelector("#invalidInputSound");
+const tieSound = document.querySelector("#tieSound");
+const validInputSound = document.querySelector("#validInputSound");
 
 let board = ['', '', '', '', '', '', '', '', ''];
     //Board looks like this
@@ -41,7 +49,10 @@ const winningIndexes = [
 //Function that tells the game what to do when the player clicks a cell
 const playerClickEvents = function (cell, index) {
     if (!checkValid(cell)) {
+        invalidInputSound.play();
         return;
+    } else {
+        validInputSound.play();
     }
     assignCellToPlayer(cell, index);
     
@@ -62,6 +73,7 @@ const checkValid = function (cell) {
     let isValid = true;
     if (cell.className === 'cell resetting' || cell.className === 'cell playerX resetting' || cell.className === 'cell playerO resetting' || cell.className === 'cell playerX' || cell.className === 'cell playerO') {
         isValid = false;
+
     }   //This is horrible, why have I done this?
     return isValid;
 }
@@ -130,15 +142,21 @@ const gameEndEvents = function (checkWin) {
     } 
     
     if (checkWin === 'win') {
+        gameOverNode.innerText = currentPlayer === "X" ? 'Player 1 Wins!' : 'Player 2 Wins!';
+        gameOverNode.className = currentPlayer === "X" ? 'playerX' : 'playerO';
         console.log(`Game Won By Player ${currentPlayer}!`);
+        gameWonSound.play();
     } else if (checkWin === 'tie') {
+        gameOverNode.innerText = 'Tie! No one won this round!'
+        gameOverNode.className = 'tie';
         console.log('The game has been tied!');
+        tieSound.play();
     }
-    initialiseBoard();
+    initialiseBoard(1000);
 }
 
 //Function that resets the game board when a round is won or tied
-const initialiseBoard = function () {
+const initialiseBoard = function (timer) {
     
     cellArray.forEach (function (cell) {
         
@@ -153,8 +171,10 @@ const initialiseBoard = function () {
             cell.classList.remove('playerX');
             cell.classList.remove('playerO');
             cell.classList.remove('resetting');
+            gameOverNode.className = 'gameOver';
+
         });
-    }, 1000)
+    }, timer)
 }
 //Function that does a hard reset of the game board
 const hardInitialiseBoard = function () {
@@ -166,6 +186,10 @@ const hardInitialiseBoard = function () {
     oScoreNode.innerText = `Score: ${oScore}`;
 
 }
+
+resetButton.addEventListener("click", function () {
+    hardInitialiseBoard(0);
+})
 
 
 //PART 2: Player Customisation -------------------------------------------
@@ -181,18 +205,19 @@ iconArray.forEach( function (icon) {
 //Function that handles events when an icon is clicked
 const iconClickEvents = function (icon) {
     if (icon.className === "icon playerX") {
-        changeIcon(icon, playerXIcon, "cell playerX");
+        playerXIcon = icon.style.backgroundImage;   //I tried refactoring this into the changeIcon function, but it broke the code for some reason
+        changeIcon(playerXIcon, "cell playerX");
     } else {
-        changeIcon(icon, playerOIcon, "cell playerO");
+        playerOIcon = icon.style.backgroundImage;
+        changeIcon(playerOIcon, "cell playerO");
     }
 }
 
 //Function that changes all backgrounds of a player's taken cells to a new one
-const changeIcon = function (icon, playerIcon, className) {
-    playerIcon = icon.style.backgroundImage;
+const changeIcon = function (playerIcon, className) {
     console.log(playerIcon);
-    const cellXArray = Array.from(document.getElementsByClassName(className));
-    cellXArray.forEach( function (cell) {
+    const cellPlayerArray = Array.from(document.getElementsByClassName(className));
+    cellPlayerArray.forEach( function (cell) {
         cell.style.backgroundImage = playerIcon;
     })
 }

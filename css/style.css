@@ -1,18 +1,15 @@
 body {
-    background-color:  #000D6B;
+    background-color:  #f7fff7;
 }
 .container {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 0.5fr 2fr 1fr;
     grid-gap: 1rem;
-    grid-template-areas:
-    "header header header"
-    "sidebar main aside"
-    "sidebar footer aside";
     text-align: center;
     max-width: 900px;
     margin: 0 auto;
+    font-family: 'Indie Flower', cursive;
     
 }
 
@@ -21,7 +18,9 @@ body {
     grid-column-start: 1;
     grid-column-end: span 3;
     grid-row-end: 2;
-    background-color: #9C19E0;
+    background-color: #fdfcdc;
+    border: 2px solid black;
+    border-radius: 25px;
 }
 
 .sidebar {
@@ -29,7 +28,9 @@ body {
     grid-row-start: 2;
     grid-row-end: span 2;
     grid-column-end: 2;
-    background-color: #9C19E0;
+    background-color: #fdfcdc;
+    border: 2px solid black;
+    border-radius: 25px;
 }
 
 .main {
@@ -38,7 +39,8 @@ body {
     grid-row-end: 3;
     grid-column-start: 2;
     grid-column-end: 2;
-    background-color: #9C19E0;
+    
+    border-radius: 25px;
 }
 .gameBoard {
     display: grid;
@@ -48,10 +50,16 @@ body {
 .cell {
     width: 96px;
     height: 96px;
-    border: 3px solid #000D6B;
+    border: 2px solid black;
+    margin: 1px;
+    border-radius: 15px;
     cursor: pointer; 
     color: rgba(0, 0, 0, 0);
     background-size: cover;
+    background-color:  #f6efff;
+}
+.cell:hover {
+    background-color: rgba(0, 128, 0, 0.301);
 }
 
 .aside {
@@ -59,14 +67,23 @@ body {
     grid-row-start: 2;
     grid-column-start: 3;
     grid-row-end: span 2;
-    background-color: #9C19E0;
+    background-color: #fdfcdc;
+    border: 2px solid black;
+    border-radius: 25px;
 }
 
 .footer {
     grid-row-start: 3;
     grid-column-start: 2;
     grid-column-end: 3;
-    background-color: #9C19E0;
+    background-color: #fdfcdc;
+    border: 2px solid black;
+    border-radius: 25px;
+    line-height: 20px;
+}
+
+.gameOver {
+    color: transparent;
 }
 
 .playerX {
@@ -76,9 +93,6 @@ body {
     color: #99DDCC;
 }
 
-.hidden {
-    color: transparent;
-}
 
 
 
@@ -90,12 +104,30 @@ body {
 .icon {
     width: 96px;
     height: 96px;
-    border: 2px solid #000D6B;
+    border: 2px solid black;
     cursor: pointer; 
+    margin: 1px;
+    border-radius: 15px;
     background-size: cover;
+    background-color: #f6efff;
 }
-
+.icon:hover {
+    background-color: rgba(0, 128, 0, 0.301);
+}
 span {
     position: relative;
     bottom: 0px;
 }
+
+#reset {
+    cursor: pointer;
+}
+
+#reset:hover {
+    color: rgba(0, 128, 0, 0.479);
+}
+
+.tie {
+    color: black;
+}
+

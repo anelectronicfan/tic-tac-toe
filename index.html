@@ -6,9 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tic-Tac-Toe</title>
     <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Poiret+One&display=swap" rel="stylesheet">
     
 </head>
 <body>
+    
+    <audio id = "gameWonSound" src="sounds/gameWon.wav"></audio>
+    <audio id = "invalidInputSound" src="sounds/invalidInput.wav"></audio>
+    <audio id = "tieSound" src="sounds/tie.mp3"></audio>
+    <audio id = "validInputSound" src="sounds/validInput.wav"></audio>
+
+
     <div class= "container">
         <section class = "header">
             <h1>Tic Tac Toe</h1>
@@ -51,6 +59,8 @@
 
         <section class = "footer">
             <h2 class = "playerTurn playerX" >Player 1's Turn.</h2>
+            <h2 class = "gameOver">Player 1 Wins!</h2>
+            <h3 id = "reset">Reset?</h3>
         </section>
        
     
