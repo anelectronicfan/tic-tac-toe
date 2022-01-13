@@ -50,11 +50,8 @@ const winningIndexes = [
 
 //Function that tells the game what to do when the player clicks a cell
 const playerClickEvents = function (cell, index) {
-    if (!checkValid(cell)) {
-        invalidInputSound.play();
+    if (!checkValid(cell)) {  
         return;
-    } else {
-        validInputSound.play();
     }
     assignCellToPlayer(cell, index);
     
@@ -76,6 +73,7 @@ const checkValid = function (cell) {
     let isValid = true;
     if (cell.className === 'cell resetting' || cell.className === 'cell playerX resetting' || cell.className === 'cell playerO resetting' || cell.className === 'cell playerX' || cell.className === 'cell playerO') {
         isValid = false;
+        invalidInputSound.play();
 
     }   //This is horrible, why have I done this?
     return isValid;
@@ -83,6 +81,7 @@ const checkValid = function (cell) {
 
 //Function that assigns a clicked cell to the player that clicked it
 const assignCellToPlayer = function (cell, boardIndex) {
+    validInputSound.play();
     cell.classList.remove(`player${currentPlayer}`);
     board[boardIndex] = currentPlayer;
     cell.classList.add(`player${currentPlayer}`);
@@ -95,6 +94,8 @@ const switchPlayer = function () {
     currentPlayer = currentPlayer === 'X' ? 'O': 'X';
     playerTurnNode.className = playerTurnNode.className === 'playerTurn playerX' ? 'playerTurn playerO' : 'playerTurn playerX';
     playerTurnNode.innerText = playerTurnNode.innerText === `Player 1's Turn` ? `Player 2's Turn` : `Player 1's Turn`;
+    isAIPlayingX = false;
+    isAIPlayingY = false;
 }
 
 //Function that checks if the game has been 'win' or 'tied'
@@ -170,6 +171,9 @@ const gameEndEvents = function (checkWin) {
 //Function that resets the game board when a round is won or tied
 const initialiseBoard = function (timer) {
     
+    isAIPlayingX = false;
+    isAIPlayingO = false;
+
     cellArray.forEach (function (cell) {
         
         cell.classList.add('resetting')
@@ -248,20 +252,28 @@ const xAIToggleButton = document.querySelector("#xAIToggle");
 const oAIToggleButton = document.querySelector("#oAIToggle");
 
 xAIToggleButton.addEventListener('click', function () {
-    isAIPlayingX = isAIPlayingX === true ? false : true; //Again, tried refactoring this inside a function, but it didn't want to work
-    console.log(isAIPlayingX);
-    AIClickEvents(isAIPlayingX);
+    isAIPlayingX = true; //Again, tried refactoring this inside a function, but it didn't want to work
+    console.log('isAIPlayingX:', isAIPlayingX);
+    if (currentPlayer === 'X') {
+        AIClickEvents(isAIPlayingX);
+    }
 })
 
 oAIToggleButton.addEventListener('click', function () {
-    isAIPlayingX = isAIPlayingX === true ? false : true;
-    AIClickEvents(isAIPlayingO);
+    isAIPlayingO = true;
+    console.log('isAIPlayingO:',isAIPlayingO);
+    if (currentPlayer === 'O') {
+        AIClickEvents(isAIPlayingO);
+    }
 })
 
-//Function that tells the game what to do when an AI toggle button is hit
-const AIClickEvents = function (isAIPlaying) {
-    
+const AIClickEvents = function (AIPlayer) {
+    const AIMove = calculateBestMove (currentPlayer);
+    assignCellToPlayer(cellArray[AIMove], AIMove);
+    gameEndEvents(checkWin());
+    switchPlayer();
 }
+
 
 //Function that looks at the board and returns a board index as an optimal move
 const calculateBestMove = function (AIPlayer) {
@@ -281,7 +293,11 @@ const calculateBestMove = function (AIPlayer) {
     //next loop through the AI's tiles
     const offensiveBestMove = checkWinningMove (AIPlayerCellIndexes);
     
-    //if offensive move can win the game, bestmove = offensive move, else bestmove = defensive move
+    //if offensive move can win the game, bestmove = offensive move, 
+    //else bestmove = defensive move to stop opponent from winning, 
+    //else bestmove = worse defensive move to block one win condition off the opponent
+    //if all that fails somehow, bestmove = first random blank tile on the board
+
     if (offensiveBestMove !== '') {
         bestMove = offensiveBestMove;
     } else if (defensiveBestMove !== '') {
@@ -335,3 +351,4 @@ const checkGoodMove = function (array) {
     }
     return goodMove;
 }
+
