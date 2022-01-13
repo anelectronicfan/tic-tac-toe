@@ -51,22 +51,6 @@ const winningIndexes = [
 
 //PART 1: MVP -----------------------------------------------------------
 
-//Function that tells the game what to do when the player clicks a cell
-const playerClickEvents = function (cell, index) {
-    if (!checkValid(cell)) {  
-        return;
-    }
-    assignCellToPlayer(cell, index);
-    
-    gameEndEvents(checkWin());
-    switchPlayer();
-    if (isAIPlayingX === true && currentPlayer === 'X') {
-        AIClickEvents();
-    } else if (isAIPlayingO === true && currentPlayer === 'O') {
-        AIClickEvents();
-    }
-}
-
 //Add event listeners to each cell
 cellArray.forEach( function (cell, index) {
     cell.addEventListener('click', function () {
@@ -75,6 +59,21 @@ cellArray.forEach( function (cell, index) {
     });
 });
 
+//Function that tells the game what to do when the player clicks a cell
+const playerClickEvents = function (cell, index) {
+    if (!checkValid(cell)) {  
+        return;
+    }
+    assignCellToPlayer(cell, index);
+    gameEndEvents(checkWin());
+    switchPlayer();
+    if (isAIPlayingX === true && currentPlayer === 'X') {
+        AIClickEvents();    // Calls the AI player if the relevant variables are true
+    } else if (isAIPlayingO === true && currentPlayer === 'O') {
+        AIClickEvents();    // Otherwise, the next human player takes the next turn
+    }
+}
+
 
 //Function that checks if a given cell can be assigned a value or not
 const checkValid = function (cell) {
@@ -82,8 +81,7 @@ const checkValid = function (cell) {
     if (cell.className === 'cell resetting' || cell.className === 'cell playerX resetting' || cell.className === 'cell playerO resetting' || cell.className === 'cell playerX' || cell.className === 'cell playerO') {
         isValid = false;
         invalidInputSound.play();
-
-    }   //This is horrible, why have I done this?
+    }   //This is horrible, why have I done this? This is the one time in this project where I wished I used jquery instead
     return isValid;
 }
 
@@ -94,7 +92,6 @@ const assignCellToPlayer = function (cell, boardIndex) {
     board[boardIndex] = currentPlayer;
     cell.classList.add(`player${currentPlayer}`);
     cell.style.backgroundImage = currentPlayer === 'X' ? playerXIconBackground : playerOIconBackground;
-
 }
 
 //Function that changes the player's turn
@@ -102,7 +99,6 @@ const switchPlayer = function () {
     currentPlayer = currentPlayer === 'X' ? 'O': 'X';
     playerTurnNode.className = playerTurnNode.className === 'playerTurn playerX' ? 'playerTurn playerO' : 'playerTurn playerX';
     playerTurnNode.innerText = playerTurnNode.innerText === `Player 1's Turn` ? `Player 2's Turn` : `Player 1's Turn`;
-    
 }
 
 //Function that checks if the game has been 'win' or 'tied'
@@ -125,12 +121,9 @@ const checkWin = function () {
             if (currentPlayer === "X") {
                 xScore ++;
                 xScoreNode.innerText = `Score: ${xScore}`;
-
-
             } else {
                 oScore ++;
                 oScoreNode.innerText = `Score: ${oScore}`;
-
             }
             return 'win';
         }
@@ -155,21 +148,18 @@ const playerCellIndexCreator = function (player) {
     return playerCellIndexes;
 }
 
-//Function that tells the game what to do when the game ends
+//Function that tells the game what to do when the game ends, executing commands based on the return value of the checkWin function
 const gameEndEvents = function (checkWin) {
     if (!checkWin) {
         return; //If game hasn't ended, do nothing and return out of this function
     } 
-    
     if (checkWin === 'win') {
         gameOverNode.innerText = currentPlayer === "X" ? 'Player 1 Wins!' : 'Player 2 Wins!';
         gameOverNode.className = currentPlayer === "X" ? 'playerX' : 'playerO';
-        console.log(`Game Won By Player ${currentPlayer}!`);
         gameWonSound.play();
     } else if (checkWin === 'tie') {
         gameOverNode.innerText = 'Tie! No one won this round!'
         gameOverNode.className = 'tie';
-        console.log('The game has been tied!');
         tieSound.play();
     }
     initialiseBoard(1000);
@@ -178,14 +168,16 @@ const gameEndEvents = function (checkWin) {
 //Function that resets the game board when a round is won or tied
 const initialiseBoard = function (timer) {
     
-    isAIPlayingX = false;
+    isAIPlayingX = false;   //Toggles AI off when the board is reinitialising.
     isAIPlayingO = false;
-
     xAIToggleButton.innerText = "I'm feeling lazy";
     oAIToggleButton.innerText = "I'm feeling lazy";
 
-    stopPlayerInput();
+    stopPlayerInput();  //Prevents player input during the reset
     
+    //This setTimeout is purely aesthetic, it serves no practical purpose, 
+    //other than allowing the players time to process that the round has ended 
+    //and the state of the board in which the round ended
     setTimeout(function () {
         board = ['', '', '', '', '', '', '', '', ''];
         cellArray.forEach( function (cell) {
@@ -200,18 +192,33 @@ const initialiseBoard = function (timer) {
 }
 //Function that does a hard reset of the game board
 const hardInitialiseBoard = function () {
-    initialiseBoard ();
+    initialiseBoard (0);    // The board needs to reset instantly in this function, for aesthetics
     xScore = 0;
     oScore = 0;
     xScoreNode.innerText = `Score: ${xScore}`;
     oScoreNode.innerText = `Score: ${oScore}`;
-
 }
 
 //Adding Event Listener to the reset button
 resetButton.addEventListener("click", function () {
-    hardInitialiseBoard(0);
+    hardInitialiseBoard();
 })
+
+//Function that stops player input. Used when setTimeout events occur, to stop any player from inputting any commands when they're not supposed to
+const stopPlayerInput = function () {
+    cellArray.forEach (function (cell) { 
+        cell.classList.add('resetting')     //checkValid has been coded to register any clicks on a cell with the 'resetting' class as invalid, disallowing any player input
+    })
+}
+
+//Function that allows player input
+const allowPlayerInput = function () {
+    cellArray.forEach (function (cell) {
+        cell.classList.remove('resetting')
+    })
+}
+
+
 
 
 //PART 2: Player Customisation ------------------------------------------
@@ -225,6 +232,7 @@ iconArray.forEach( function (icon) {
 });
 
 //Function that handles events when an icon is clicked
+//This reads the url of a selected icon, then passes that value into the changeIcon function
 const iconClickEvents = function (icon) {
     if (icon.className === "icon playerX") {
         playerXIconBackground = icon.style.backgroundImage;   //I tried refactoring this into the changeIcon function, but it broke the code for some reason
@@ -235,7 +243,7 @@ const iconClickEvents = function (icon) {
     }
 }
 
-//Function that changes the selected icon, replacing the previous icon for the player
+//Function that replaces past and future cells made by a player with a selected icon
 const changeIcon = function (icon, playerIconBackground, cellClassName, iconClassName) {
     console.log(playerIconBackground);
     const cellPlayerArray = Array.from(document.getElementsByClassName(cellClassName));
@@ -243,30 +251,31 @@ const changeIcon = function (icon, playerIconBackground, cellClassName, iconClas
         cell.style.backgroundImage = playerIconBackground;
     })
 
+    //remove the "selectedIcon" class from the previous selected icon
     const iconPlayerArray = Array.from(document.getElementsByClassName(iconClassName));
     iconPlayerArray.forEach(function(node) {
         node.classList.remove("selectedIcon");
     })
 
+    //adds the "selectedIcon" class to the currently selected icon
+    //The "selectedIcon" class merely changes the background color to green in order to signify which icon is selected currently
     icon.classList.add("selectedIcon");
 }
 
 //Part 3 - A.I but it's more A than I -----------------------------------
 
 //Adding Event Listeners to each AI toggle button
-
-
 xAIToggleButton.addEventListener('click', function () {
-    isAIPlayingX = isAIPlayingX === true ? false : true; //Again, tried refactoring this inside a function, but it didn't want to work
+    isAIPlayingX = isAIPlayingX === true ? false : true; //Tenary expression that toggles AI on or off on every click
     xAIToggleButton.innerText = isAIPlayingX === true ? "I want to play!" : "I'm feeling lazy";
     console.log('isAIPlayingX:', isAIPlayingX);
     if (currentPlayer === 'X') {
-        AIClickEvents();
+        AIClickEvents();    // Executes AI command immediately if it's the relevant player's turn, otherwise AI will be called after the opposing takes their turn
     }
 })
 
 oAIToggleButton.addEventListener('click', function () {
-    isAIPlayingO = isAIPlayingO === true ? false : true;
+    isAIPlayingO = isAIPlayingO === true ? false : true; //Again, tried refactoring this inside a function, but it didn't want to work
     oAIToggleButton.innerText = isAIPlayingO === true ? "I want to play!" : "I'm feeling lazy";
     console.log('isAIPlayingO:',isAIPlayingO);
     if (currentPlayer === 'O') {
@@ -274,6 +283,8 @@ oAIToggleButton.addEventListener('click', function () {
     }
 })
 
+// Function that tells the game what to do when it's an AI's turn
+// This is essentially the same function as playerClickEvents
 const AIClickEvents = function () {
     stopPlayerInput();
     setTimeout(function () {
@@ -283,9 +294,9 @@ const AIClickEvents = function () {
         switchPlayer();
         allowPlayerInput();
         if (isAIPlayingX === true && currentPlayer === 'X') {
-            AIClickEvents();
+            AIClickEvents();    //This function will call itself but for another AI player if both AI toggles are on
         } else if (isAIPlayingO === true && currentPlayer === 'O') {
-            AIClickEvents();
+            AIClickEvents();    //Otherwise, it will pass control back to a human player
         }
     }, 300) 
 }
@@ -300,19 +311,21 @@ const calculateBestMove = function (AIPlayer) {
     }
     const opposingPlayer = AIPlayer === "X" ? "O" : "X";
 
+    //First two arrays are initialised, one for both players. These contain index numbers of 
+    //whatever cells they have taken on the gameboard
     const AIPlayerCellIndexes = playerCellIndexCreator(AIPlayer);
     const opposingPlayerCellIndexes = playerCellIndexCreator(opposingPlayer);
 
-    //first loop through opposing player's taken tiles
-    const defensiveBestMove = checkWinningMove(opposingPlayerCellIndexes);
-    const defensiveGoodMove = checkGoodMove(opposingPlayerCellIndexes);
-    //next loop through the AI's tiles
-    const offensiveBestMove = checkWinningMove (AIPlayerCellIndexes);
+    //Next, we generate three possible moves that the AI player can take.
+    const defensiveBestMove = checkWinningMove(opposingPlayerCellIndexes);  // This is a move that should be taken if the opposing player is about to win
+    const defensiveGoodMove = checkGoodMove(opposingPlayerCellIndexes);     // This is a move that blocks off one possible win condition from the opposing player
+    
+    const offensiveBestMove = checkWinningMove (AIPlayerCellIndexes);       // This is a move that will win the game for the A.I player
     
     //if offensive move can win the game, bestmove = offensive move, 
     //else bestmove = defensive move to stop opponent from winning, 
     //else bestmove = worse defensive move to block one win condition off the opponent
-    //if all that fails somehow, bestmove = first random blank tile on the board
+    //if all that fails somehow, bestmove = first blank tile on the board
 
     if (offensiveBestMove !== '') {
         bestMove = offensiveBestMove;
@@ -333,6 +346,8 @@ const checkWinningMove = function (array) {
         let a = winningIndexes[i][0];
         let b = winningIndexes[i][1];
         let c = winningIndexes[i][2];
+
+        //If 2/3 winningIndexes for any winCondition are taken by a player, and the third is not taken, the bestMove is the third index.
         if (array.includes(a) && array.includes(b) && board[c] === '') {
             bestMove = c;
         } else if (array.includes(a) && array.includes(c) && board[b] === '') {
@@ -351,6 +366,8 @@ const checkGoodMove = function (array) {
         let a = winningIndexes[i][0];
         let b = winningIndexes[i][1];
         let c = winningIndexes[i][2];
+
+        //If 1/3 winningIndexes for any winCondition are taken by a player, and at least one of the other two are not taken, a goodMove will be to take one of them
         if (array.includes(a) && board[b] === '') {
             goodMove = b;
         } else if (array.includes(a) && board[c] === '') {
@@ -368,16 +385,4 @@ const checkGoodMove = function (array) {
     return goodMove;
 }
 
-//Function that stops player input
-const stopPlayerInput = function () {
-    cellArray.forEach (function (cell) { 
-        cell.classList.add('resetting')
-    })
-}
 
-//Function that allows player input
-const allowPlayerInput = function () {
-    cellArray.forEach (function (cell) {
-        cell.classList.remove('resetting')
-    })
-}

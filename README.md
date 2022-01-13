@@ -13,11 +13,13 @@ My rendition of the classic game is written in HTML, CSS and vanilla Javascript.
 - Sound Effects
 - A Pleasant Colour Scheme
 - No Bugs (as far as I can see with my frankly extensive play-testing)
-- WET Code (but fortunately no spaghetti)
+- WET Code
 - Lots of console.logs
 - Customisable Pop-Culture Icons because noughts and crosses are out-dated and the world doesn't have enough pop-culture references already
 - Togglable Fully-Functional AI that is surprisingly hard to beat. I've yet to win a round against it.
 - A score counter that keeps track of how many games each player has won.
+- A reset button when you don't want to look at how many games you've lost to the AI
+- Mobile functionality! You can play this on your phone
 
 Here's how the game looks on a laptop or desktop PC:
 [Have a screenshot](images/tic-tac-toe-desktop.png)
@@ -46,3 +48,4 @@ Whilst I'm certainly happy and irrationally proud of what I have made, achieved 
 - Two Dimensional Arrays for the gameBoard
 - LocalStorage implementation
 - Online Multiplayer (Genuinely have no concept of how this may ever work but if I read hard enough ~~and maybe plagiarise~~, I'm sure I can get it done)
+- Better DRYer and refactored code
