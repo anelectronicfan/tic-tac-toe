@@ -1,5 +1,5 @@
 body {
-    background-color: #FEECE9;
+    background-color:  #000D6B;
 }
 .container {
     display: grid;
@@ -13,6 +13,7 @@ body {
     text-align: center;
     max-width: 900px;
     margin: 0 auto;
+    
 }
 
 .header {
@@ -20,14 +21,15 @@ body {
     grid-column-start: 1;
     grid-column-end: span 3;
     grid-row-end: 2;
-    background-color: #CCD1E4;
+    background-color: #9C19E0;
 }
 
 .sidebar {
+    display: grid;
     grid-row-start: 2;
     grid-row-end: span 2;
     grid-column-end: 2;
-    background-color: #CCD1E4;
+    background-color: #9C19E0;
 }
 
 .main {
@@ -36,7 +38,7 @@ body {
     grid-row-end: 3;
     grid-column-start: 2;
     grid-column-end: 2;
-    background-color: #CCD1E4;
+    background-color: #9C19E0;
 }
 .gameBoard {
     display: grid;
@@ -44,33 +46,56 @@ body {
     grid-template-rows: 1fr 1fr 1fr;
 }
 .cell {
-    width: 100px;
-    height: 100px;
-    border: 1px solid #FEECE9;
+    width: 96px;
+    height: 96px;
+    border: 3px solid #000D6B;
     cursor: pointer; 
+    color: rgba(0, 0, 0, 0);
+    background-size: cover;
 }
 
 .aside {
+    display: grid;
     grid-row-start: 2;
     grid-column-start: 3;
     grid-row-end: span 2;
-    background-color: #CCD1E4;
+    background-color: #9C19E0;
 }
 
 .footer {
     grid-row-start: 3;
     grid-column-start: 2;
     grid-column-end: 3;
-    background-color: #CCD1E4;
+    background-color: #9C19E0;
 }
 
 .playerX {
-    color: #FE7E6D;
+    color: #FF5DA2;
 }
 .playerO {
-    color: #2F3A8F;
+    color: #99DDCC;
 }
 
 .hidden {
     color: transparent;
+}
+
+
+
+.charSelect {
+    margin: auto auto;
+    grid-row-start: 1;
+    grid-row-end: 1;
+}
+.icon {
+    width: 96px;
+    height: 96px;
+    border: 2px solid #000D6B;
+    cursor: pointer; 
+    background-size: cover;
+}
+
+span {
+    position: relative;
+    bottom: 0px;
 }

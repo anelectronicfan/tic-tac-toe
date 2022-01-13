@@ -2,6 +2,11 @@
 
 //DECLARE GLOBAL VARIABLES
 const cellArray = document.querySelectorAll('.cell');   //Array.from is a method that converts an array-like object (like a nodelist) into an array
+
+const iconArray = document.querySelectorAll('.icon');
+let playerXIcon = 'url(images/icons8-bt21-cooky-96.png)';
+let playerOIcon = "url(images/icons8-bt21-rj-96.png)";
+
 const playerTurnNode = document.querySelector('.playerTurn');
 let currentPlayer = 'X';
 let xScore = 0;
@@ -39,7 +44,7 @@ const playerClickEvents = function (cell, index) {
         return;
     }
     assignCellToPlayer(cell, index);
-    cell.innerText = currentPlayer;
+    
     gameEndEvents(checkWin());
     switchPlayer();
 }
@@ -47,6 +52,7 @@ const playerClickEvents = function (cell, index) {
 cellArray.forEach( function (cell, index) {
     cell.addEventListener('click', function () {
         playerClickEvents(cell, index);
+        console.log("Added Event Listener to ", cell);
     });
 });
 
@@ -65,13 +71,15 @@ const assignCellToPlayer = function (cell, boardIndex) {
     cell.classList.remove(`player${currentPlayer}`);
     board[boardIndex] = currentPlayer;
     cell.classList.add(`player${currentPlayer}`);
+    cell.style.backgroundImage = currentPlayer === 'X' ? playerXIcon : playerOIcon;
+
 }
 
 //Function that changes the player's turn
 const switchPlayer = function () {
     currentPlayer = currentPlayer === 'X' ? 'O': 'X';
     playerTurnNode.className = playerTurnNode.className === 'playerTurn playerX' ? 'playerTurn playerO' : 'playerTurn playerX';
-    playerTurnNode.innerText = `Player ${currentPlayer}'s Turn.`;
+    playerTurnNode.innerText = playerTurnNode.innerText === `Player 1's Turn.` ? `Player 2's Turn.` : `Player 1's Turn.`;
 }
 
 //Function that checks if the game has been 'win' or 'tied'
@@ -141,6 +149,7 @@ const initialiseBoard = function () {
         board = ['', '', '', '', '', '', '', '', ''];
         cellArray.forEach( function (cell) {
             cell.innerText = '';
+            cell.style.backgroundImage = 'none';
             cell.classList.remove('playerX');
             cell.classList.remove('playerO');
             cell.classList.remove('resetting');
@@ -153,12 +162,37 @@ const hardInitialiseBoard = function () {
     xScore = 0;
     oScore = 0;
     roundsPlayed = 1;
-    xScoreNode.innerText = `Player 1 Score: ${xScore}`;
-    oScoreNode.innerText = `Player 2 Score: ${oScore}`;
+    xScoreNode.innerText = `Score: ${xScore}`;
+    oScoreNode.innerText = `Score: ${oScore}`;
 
 }
 
 
 //PART 2: Player Customisation -------------------------------------------
 
+//Adding event listeners to each icon
+iconArray.forEach( function (icon) {
+    icon.addEventListener('click', function () {
+        iconClickEvents (icon);
+        console.log("Added Event Listener to ", icon);
+    });
+});
 
+//Function that handles events when an icon is clicked
+const iconClickEvents = function (icon) {
+    if (icon.className === "icon playerX") {
+        changeIcon(icon, playerXIcon, "cell playerX");
+    } else {
+        changeIcon(icon, playerOIcon, "cell playerO");
+    }
+}
+
+//Function that changes all backgrounds of a player's taken cells to a new one
+const changeIcon = function (icon, playerIcon, className) {
+    playerIcon = icon.style.backgroundImage;
+    console.log(playerIcon);
+    const cellXArray = Array.from(document.getElementsByClassName(className));
+    cellXArray.forEach( function (cell) {
+        cell.style.backgroundImage = playerIcon;
+    })
+}
