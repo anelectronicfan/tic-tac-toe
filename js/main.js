@@ -256,7 +256,7 @@ const xAIToggleButton = document.querySelector("#xAIToggle");
 const oAIToggleButton = document.querySelector("#oAIToggle");
 
 xAIToggleButton.addEventListener('click', function () {
-    isAIPlayingX = true; //Again, tried refactoring this inside a function, but it didn't want to work
+    isAIPlayingX = isAIPlayingX === true ? false : true; //Again, tried refactoring this inside a function, but it didn't want to work
     console.log('isAIPlayingX:', isAIPlayingX);
     if (currentPlayer === 'X') {
         AIClickEvents();
@@ -264,7 +264,7 @@ xAIToggleButton.addEventListener('click', function () {
 })
 
 oAIToggleButton.addEventListener('click', function () {
-    isAIPlayingO = true;
+    isAIPlayingO = isAIPlayingO === true ? false : true;
     console.log('isAIPlayingO:',isAIPlayingO);
     if (currentPlayer === 'O') {
         AIClickEvents(isAIPlayingO);
