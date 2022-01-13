@@ -22,6 +22,9 @@ const invalidInputSound = document.querySelector("#invalidInputSound");
 const tieSound = document.querySelector("#tieSound");
 const validInputSound = document.querySelector("#validInputSound");
 
+const xAIToggleButton = document.querySelector("#xAIToggle");
+const oAIToggleButton = document.querySelector("#oAIToggle");
+
 let isAIPlayingX = false;
 let isAIPlayingO = false;
 
@@ -178,10 +181,10 @@ const initialiseBoard = function (timer) {
     isAIPlayingX = false;
     isAIPlayingO = false;
 
-    cellArray.forEach (function (cell) {
-        
-        cell.classList.add('resetting')
-    })
+    xAIToggleButton.innerText = "I'm feeling lazy";
+    oAIToggleButton.innerText = "I'm feeling lazy";
+
+    stopPlayerInput();
     
     setTimeout(function () {
         board = ['', '', '', '', '', '', '', '', ''];
@@ -190,10 +193,9 @@ const initialiseBoard = function (timer) {
             cell.style.backgroundImage = 'none';
             cell.classList.remove('playerX');
             cell.classList.remove('playerO');
-            cell.classList.remove('resetting');
             gameOverNode.className = 'gameOver';
-
         });
+        allowPlayerInput(); //technically more lines of code are processed here, but better readability
     }, timer)
 }
 //Function that does a hard reset of the game board
@@ -252,11 +254,11 @@ const changeIcon = function (icon, playerIconBackground, cellClassName, iconClas
 //Part 3 - A.I but it's more A than I -----------------------------------
 
 //Adding Event Listeners to each AI toggle button
-const xAIToggleButton = document.querySelector("#xAIToggle");
-const oAIToggleButton = document.querySelector("#oAIToggle");
+
 
 xAIToggleButton.addEventListener('click', function () {
     isAIPlayingX = isAIPlayingX === true ? false : true; //Again, tried refactoring this inside a function, but it didn't want to work
+    xAIToggleButton.innerText = isAIPlayingX === true ? "I'm feeling active" : "I'm feeling lazy";
     console.log('isAIPlayingX:', isAIPlayingX);
     if (currentPlayer === 'X') {
         AIClickEvents();
@@ -265,6 +267,7 @@ xAIToggleButton.addEventListener('click', function () {
 
 oAIToggleButton.addEventListener('click', function () {
     isAIPlayingO = isAIPlayingO === true ? false : true;
+    oAIToggleButton.innerText = isAIPlayingO === true ? "I'm feeling active" : "I'm feeling lazy";
     console.log('isAIPlayingO:',isAIPlayingO);
     if (currentPlayer === 'O') {
         AIClickEvents(isAIPlayingO);
@@ -272,15 +275,19 @@ oAIToggleButton.addEventListener('click', function () {
 })
 
 const AIClickEvents = function () {
-    const AIMove = calculateBestMove (currentPlayer);
-    assignCellToPlayer(cellArray[AIMove], AIMove);
-    gameEndEvents(checkWin());
-    switchPlayer();
-    if (isAIPlayingX === true && currentPlayer === 'X') {
-        AIClickEvents();
-    } else if (isAIPlayingO === true && currentPlayer === 'O') {
-        AIClickEvents();
-    }
+    stopPlayerInput();
+    setTimeout(function () {
+        const AIMove = calculateBestMove (currentPlayer);
+        assignCellToPlayer(cellArray[AIMove], AIMove);
+        gameEndEvents(checkWin());
+        switchPlayer();
+        allowPlayerInput();
+        if (isAIPlayingX === true && currentPlayer === 'X') {
+            AIClickEvents();
+        } else if (isAIPlayingO === true && currentPlayer === 'O') {
+            AIClickEvents();
+        }
+    }, 500) 
 }
 
 
@@ -361,3 +368,16 @@ const checkGoodMove = function (array) {
     return goodMove;
 }
 
+//Function that stops player input
+const stopPlayerInput = function () {
+    cellArray.forEach (function (cell) { 
+        cell.classList.add('resetting')
+    })
+}
+
+//Function that allows player input
+const allowPlayerInput = function () {
+    cellArray.forEach (function (cell) {
+        cell.classList.remove('resetting')
+    })
+}
