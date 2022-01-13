@@ -31,7 +31,9 @@ const winningIndexes = [
 
 //DEFINE FUNCTIONS
 
-//Function that handles the flow of the game
+//PART 1: MVP -------------------------------------------------------
+
+//Function that tells the game what to do when the player clicks a cell
 const playerClickEvents = function (cell, index) {
     if (!checkValid(cell)) {
         return;
@@ -51,7 +53,10 @@ cellArray.forEach( function (cell, index) {
 
 //Function that checks if a given cell can be assigned a value or not
 const checkValid = function (cell) {
-    const isValid = cell.innerText === '' ? true : false; //expression that sets isValid as true or false depending on whether or not the given cell is empty
+    let isValid = true;
+    if (cell.className === 'cell resetting' || cell.className === 'cell playerX resetting' || cell.className === 'cell playerO resetting' || cell.className === 'cell playerX' || cell.className === 'cell playerO') {
+        isValid = false;
+    }   //This is horrible, why have I done this?
     return isValid;
 }
 
@@ -65,7 +70,7 @@ const assignCellToPlayer = function (cell, boardIndex) {
 //Function that changes the player's turn
 const switchPlayer = function () {
     currentPlayer = currentPlayer === 'X' ? 'O': 'X';
-    playerTurnNode.id = playerTurnNode.id === 'playerX' ? 'playerO' : 'playerX';
+    playerTurnNode.className = playerTurnNode.className === 'playerTurn playerX' ? 'playerTurn playerO' : 'playerTurn playerX';
     playerTurnNode.innerText = `Player ${currentPlayer}'s Turn.`;
 }
 
@@ -126,28 +131,34 @@ const gameEndEvents = function (checkWin) {
 
 //Function that resets the game board when a round is won or tied
 const initialiseBoard = function () {
-
-    cellArray.forEach( function (cell, index) {
-        cell.removeEventListener('click', function () {
-            playerClickEvents(cell, index);
-        });
-    });
-
+    
+    cellArray.forEach (function (cell) {
+        
+        cell.classList.add('resetting')
+    })
+    
     setTimeout(function () {
         board = ['', '', '', '', '', '', '', '', ''];
-    cellArray.forEach( function (cell) {
-        cell.innerText = '';
-        cell.classList.remove('playerX');
-        cell.classList.remove('playerO');
-    })
-
-    cellArray.forEach( function (cell, index) {
-        cell.addEventListener('click', function () {
-            playerClickEvents(cell, index);
+        cellArray.forEach( function (cell) {
+            cell.innerText = '';
+            cell.classList.remove('playerX');
+            cell.classList.remove('playerO');
+            cell.classList.remove('resetting');
         });
-    });
     }, 1000)
-    
 }
+//Function that does a hard reset of the game board
+const hardInitialiseBoard = function () {
+    initialiseBoard ();
+    xScore = 0;
+    oScore = 0;
+    roundsPlayed = 1;
+    xScoreNode.innerText = `Player 1 Score: ${xScore}`;
+    oScoreNode.innerText = `Player 2 Score: ${oScore}`;
+
+}
+
+
+//PART 2: Player Customisation -------------------------------------------
 
 

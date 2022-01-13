@@ -1,21 +1,76 @@
-section {
+body {
+    background-color: #FEECE9;
+}
+.container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 0.5fr 2fr 1fr;
+    grid-gap: 1rem;
+    grid-template-areas:
+    "header header header"
+    "sidebar main aside"
+    "sidebar footer aside";
     text-align: center;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.header {
+    text-align: center;
+    grid-column-start: 1;
+    grid-column-end: span 3;
+    grid-row-end: 2;
+    background-color: #CCD1E4;
+}
+
+.sidebar {
+    grid-row-start: 2;
+    grid-row-end: span 2;
+    grid-column-end: 2;
+    background-color: #CCD1E4;
+}
+
+.main {
+    text-align: center;
+    grid-row-start: 2;
+    grid-row-end: 3;
+    grid-column-start: 2;
+    grid-column-end: 2;
+    background-color: #CCD1E4;
 }
 .gameBoard {
     display: grid;
-    width: 300px;
-    grid-template-columns: repeat(3, auto);
-    margin: 50px auto;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
 }
 .cell {
     width: 100px;
     height: 100px;
-    border: 1px solid black;
+    border: 1px solid #FEECE9;
     cursor: pointer; 
 }
+
+.aside {
+    grid-row-start: 2;
+    grid-column-start: 3;
+    grid-row-end: span 2;
+    background-color: #CCD1E4;
+}
+
+.footer {
+    grid-row-start: 3;
+    grid-column-start: 2;
+    grid-column-end: 3;
+    background-color: #CCD1E4;
+}
+
 .playerX {
-    color: red;
+    color: #FE7E6D;
 }
 .playerO {
-    color: blue;
+    color: #2F3A8F;
+}
+
+.hidden {
+    color: transparent;
 }

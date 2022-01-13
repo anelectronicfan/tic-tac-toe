@@ -9,23 +9,42 @@
     
 </head>
 <body>
-    <section>
-        <h1>Tic Tac Toe</h1>
-        <div class = 'gameBoard'>
-            <div class = 'cell' id = 'a0'></div>
-            <div class = 'cell' id = 'a1'></div>
-            <div class = 'cell' id = 'a2'></div>
-            <div class = 'cell' id = 'b0'></div>
-            <div class = 'cell' id = 'b1'></div>
-            <div class = 'cell' id = 'b2'></div>
-            <div class = 'cell' id = 'c0'></div>
-            <div class = 'cell' id = 'c1'></div>
-            <div class = 'cell' id = 'c2'></div>
-        </div>
-    </section>
-    <h2 class = "playerTurn" id = "playerX">Player X's Turn.</h2>
-    <span id = 'xScore'>Player 1 Score: 0</span>
-    <span id = 'oScore'>Player 2 Score: 0</span>
+    <div class= "container">
+        <section class = "header">
+            <h1>Tic Tac Toe</h1>
+        </section>
+
+        <section class = "sidebar">
+            <span id = "xScore" class = "playerX">Player 1 Score: 0</span>
+        </section>
+
+
+        <section class = "main">
+            <div class = 'gameBoard'>
+                <div class = 'cell'></div>
+                <div class = 'cell'></div>
+                <div class = 'cell'></div>
+                <div class = 'cell'></div>
+                <div class = 'cell'></div>
+                <div class = 'cell'></div>
+                <div class = 'cell'></div>
+                <div class = 'cell'></div>
+                <div class = 'cell'></div>
+            </div>
+        </section>
+
+        <section class = "aside">
+            <span id = "oScore" class = "playerO">Player 2 Score: 0</span>
+        </section>
+
+        <section class = "footer">
+            <h2 class = "playerTurn playerX" >Player X's Turn.</h2>
+        </section>
+       
+    
+    
+    </div>  
+
     
     <script src = "js/main.js"></script>
 </body>
