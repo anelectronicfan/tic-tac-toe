@@ -1,5 +1,3 @@
-https://anelectronicfan.github.io/tic-tac-toe/
-
 # Tic-Tac-Toe
 
 You can find an online link to the game [here:](https://anelectronicfan.github.io/tic-tac-toe/)
@@ -34,7 +32,7 @@ And here's how it looks on a tiny device:
 
 ### I'm definitely not complaining here
 
-I definitely feel that I wasted a lot of time during this project. Most of that comes down to fiddling with the CSS styling, trying to get one part just right and breaking several other parts in the process. This starts a terrible loop where I'd go and fix what had broken, only then to break even more parts. I started experimenting with grid about halfway through when I'd finally gotten sick of my self-induced abuse, and found that it solved most, if not all my problems with CSS. If only I'd tried it out sooner.
+I wasted a lot of time during this project. Most of that comes down to fiddling with the CSS styling, trying to get one part just right and breaking several other parts in the process. This starts a terrible loop where I'd go and fix what had broken, only then to break even more parts. I started experimenting with grid about halfway through when I'd finally gotten sick of my self-induced abuse, and found that it solved most, if not all my problems with CSS. If only I'd tried it out sooner.
 
 Trying to refactor code too early, or pre-refactoring code before I had written it was also one of my downfalls. This process only works if I know exactly what to code and how exactly each moving part would feed into the next - but I definitely did not. I certainly felt that I knew what I was doing, but I was merely digging myself into bigger holes. I gave up that endeavor too, and progress certainly sped up if only at the cost of "dryness" and my sanity.
 
