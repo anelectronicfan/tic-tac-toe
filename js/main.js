@@ -44,7 +44,7 @@ const winningIndexes = [
 
 //DEFINE FUNCTIONS
 
-//PART 1: MVP -------------------------------------------------------
+//PART 1: MVP -----------------------------------------------------------
 
 //Function that tells the game what to do when the player clicks a cell
 const playerClickEvents = function (cell, index) {
@@ -114,13 +114,13 @@ const checkWin = function () {
             if (currentPlayer === "X") {
                 xScore ++;
                 roundsPlayed++;
-                xScoreNode.innerText = `Player 1 Score: ${xScore}`;
+                xScoreNode.innerText = `Score: ${xScore}`;
 
 
             } else {
                 oScore ++;
                 roundsPlayed++;
-                oScoreNode.innerText = `Player 2 Score: ${oScore}`;
+                oScoreNode.innerText = `Score: ${oScore}`;
 
             }
             return 'win';
@@ -192,7 +192,7 @@ resetButton.addEventListener("click", function () {
 })
 
 
-//PART 2: Player Customisation -------------------------------------------
+//PART 2: Player Customisation ------------------------------------------
 
 //Adding event listeners to each icon
 iconArray.forEach( function (icon) {
@@ -229,3 +229,4 @@ const changeIcon = function (icon, playerIconBackground, cellClassName, iconClas
     icon.classList.add("selectedIcon");
 }
 
+//Part 3 - A.I but it's more A than I -----------------------------------
