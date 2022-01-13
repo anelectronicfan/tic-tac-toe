@@ -202,7 +202,7 @@ const initialiseBoard = function (timer) {
 const hardInitialiseBoard = function () {
     initialiseBoard ();
     xScore = 0;
-    oScore =1;
+    oScore = 0;
     xScoreNode.innerText = `Score: ${xScore}`;
     oScoreNode.innerText = `Score: ${oScore}`;
 
