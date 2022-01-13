@@ -22,13 +22,13 @@ My rendition of the classic game is written in HTML, CSS and vanilla Javascript.
 - A score counter that keeps track of how many games each player has won.
 
 Here's how the game looks on a laptop or desktop PC:
-[Have a screenshot](images/tic-tac-toe-desktop)
+[Have a screenshot](images/tic-tac-toe-desktop.png)
 
 And here's how it looks on a mobile device:
-[Have another screenshot](images/tic-tac-toe-mobile)
+[Have another screenshot](images/tic-tac-toe-mobile.png)
 
 And here's how it looks on a tiny device:
-[Last screenshot, I promise](images/tic-tac-toe-tiny)
+[Last screenshot, I promise](images/tic-tac-toe-tiny.png)
 
 
 
